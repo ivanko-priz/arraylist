@@ -67,6 +67,10 @@ public class ArrayListImpl<E> implements ArrayList<E> {
         this.sortingAlgorithm = new QuickSortImpl<>();
     }
 
+    public int getCapacity() {
+        return this.capacity;
+    }
+
     /**
      * Creates an empty array of specified capacity. Used internally.
      *
