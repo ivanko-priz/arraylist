@@ -72,4 +72,11 @@ public interface ArrayList<E> {
      * @return          removed element.
      */
     E remove(int index);
+
+    /**
+     * Sorts an array using Comparable<E>.
+     *
+     * @param comparator    comparator which will be used to sort elements.
+     */
+    void sort(Comparator<E> comparator);
 }
