@@ -137,7 +137,9 @@ public class ArrayListImpl<E> implements ArrayList<E> {
 
     @Override
     public boolean contains(E element) {
-        return false;
+        boolean isPresent = Arrays.stream(this.array).anyMatch(e -> e.equals(element));
+
+        return isPresent;
     }
 
     @Override
@@ -165,6 +167,14 @@ public class ArrayListImpl<E> implements ArrayList<E> {
 
     @Override
     public boolean remove(E element) {
+        int index = this.indexOf(element);
+
+        if (index != -1) {
+            this.remove(index);
+
+            return true;
+        }
+
         return false;
     }
 
