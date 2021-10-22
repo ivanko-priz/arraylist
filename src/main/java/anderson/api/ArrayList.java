@@ -92,5 +92,5 @@ public interface ArrayList<E> {
      *
      * @return      array E[] with array.length = LinkedList.size()
      */
-    E[] toArray();
+    Object[] toArray();
 }

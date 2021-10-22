@@ -207,11 +207,7 @@ public class ArrayListImpl<E> implements ArrayList<E> {
     }
 
     @Override
-    public E[] toArray() {
-        E[] trimmedArray = (E[]) new Object[this.size()];
-
-        System.arraycopy(this.array,0, trimmedArray, 0, this.size());
-
-        return trimmedArray;
+    public Object[] toArray() {
+        return Arrays.copyOf(this.array, this.size());
     }
 }
