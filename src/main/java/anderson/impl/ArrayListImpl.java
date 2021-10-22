@@ -205,4 +205,13 @@ public class ArrayListImpl<E> implements ArrayList<E> {
     public void sort(Comparator<E> comparator) {
         this.sortingAlgorithm.sort(this.array, comparator);
     }
+
+    @Override
+    public E[] toArray() {
+        E[] trimmedArray = (E[]) new Object[this.size()];
+
+        System.arraycopy(this.array,0, trimmedArray, 0, this.size());
+
+        return trimmedArray;
+    }
 }

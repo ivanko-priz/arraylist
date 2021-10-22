@@ -86,4 +86,11 @@ public interface ArrayList<E> {
      * @return      total number of elements a list can store.
      */
     int getCapacity();
+
+    /**
+     * Returns array of elements
+     *
+     * @return      array E[] with array.length = LinkedList.size()
+     */
+    E[] toArray();
 }
