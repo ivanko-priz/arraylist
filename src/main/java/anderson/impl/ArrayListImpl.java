@@ -2,6 +2,7 @@ package anderson.impl;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -141,7 +142,7 @@ public class ArrayListImpl<E> implements ArrayList<E> {
 
     @Override
     public boolean contains(E element) {
-        boolean isPresent = Arrays.stream(this.array).anyMatch(e -> e.equals(element));
+        boolean isPresent = Arrays.stream(this.array).filter(Objects::nonNull).anyMatch(e -> e.equals(element));
 
         return isPresent;
     }
