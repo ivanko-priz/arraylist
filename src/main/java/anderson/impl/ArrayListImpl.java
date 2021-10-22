@@ -204,7 +204,11 @@ public class ArrayListImpl<E> implements ArrayList<E> {
 
     @Override
     public void sort(Comparator<E> comparator) {
-        this.sortingAlgorithm.sort(this.array, comparator);
+        E[] sorted = this.sortingAlgorithm.sort(Arrays.copyOf(this.array, this.size()), comparator);
+
+        this.array = sorted;
+
+        this.growCapacity();
     }
 
     @Override
