@@ -2,7 +2,7 @@ package anderson.api;
 
 import java.util.Comparator;
 
-public interface Sort<E> {
+public interface ArraySort<E> {
     /**
      * Sorts an array of comparables elements.
      *

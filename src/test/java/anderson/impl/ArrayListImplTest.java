@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 
-import anderson.api.ArrayList;
+import anderson.api.List;
 
 public class ArrayListImplTest {
     @Test
@@ -13,37 +13,55 @@ public class ArrayListImplTest {
         final int DEFAULT_CAPACITY = 10;
         final int DEFAULT_SIZE = 0;
 
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
-        assertEquals(DEFAULT_SIZE, arrayList.size());
-        assertEquals(DEFAULT_CAPACITY, arrayList.getCapacity());
+        assertEquals(DEFAULT_SIZE, list.size());
+        assertEquals(DEFAULT_CAPACITY, list.getCapacity());
     }
 
     @Test
     public void shouldInitWithProvidedCapacity() {
         final int CAPACITY = 15;
 
-        ArrayList<Integer> arrayList = new ArrayListImpl<>(CAPACITY);
+        List<Integer> list = new ArrayListImpl<>(CAPACITY);
     }
 
     @Test
     public void shouldAddElement() {
         final int EXPECTED_ELEMENT = 5;
 
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
-        arrayList.add(5);
+        list.add(5);
 
         assertEquals(EXPECTED_ELEMENT, 5);
+    }
+
+    @Test
+    public void shouldThrowWhenNullElementAdded() {
+        List<Integer> list = new ArrayListImpl<>();
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            list.add(null);
+        });
+    }
+
+    @Test
+    public void shouldThrowWhenNullElementAddedAtPosition() {
+        List<Integer> list = new ArrayListImpl<>();
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            list.add(0, null);
+        });
     }
 
     @Test
     public void shouldIncrementSizeAfterAddingElement() {
         final int EXPECTED_LIST_SIZE = 1;
 
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
-        arrayList.add(5);
+        list.add(5);
 
         assertEquals(EXPECTED_LIST_SIZE, 1);
     }
@@ -52,30 +70,30 @@ public class ArrayListImplTest {
     public void shouldKeepTrackOfMultipleElements() {
         final int EXPECTED_SIZE = 5;
 
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
-        arrayList.add(5);
-        arrayList.add(7);
-        arrayList.add(3);
-        arrayList.add(10);
-        arrayList.add(13);
+        list.add(5);
+        list.add(7);
+        list.add(3);
+        list.add(10);
+        list.add(13);
 
-        assertEquals(EXPECTED_SIZE, arrayList.size());
+        assertEquals(EXPECTED_SIZE, list.size());
     }
 
     @Test
     public void shouldPreserveOrderOfAddedElements() {
         final Integer[] EXPECTED_ARRAY = { 5, 7, 3, 10, 13 };
 
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
-        arrayList.add(5);
-        arrayList.add(7);
-        arrayList.add(3);
-        arrayList.add(10);
-        arrayList.add(13);
+        list.add(5);
+        list.add(7);
+        list.add(3);
+        list.add(10);
+        list.add(13);
 
-        assertArrayEquals(EXPECTED_ARRAY, arrayList.toArray());
+        assertArrayEquals(EXPECTED_ARRAY, list.toArray());
     }
 
     @Test
@@ -83,88 +101,88 @@ public class ArrayListImplTest {
         final int EXPECTED_VALUE = 100;
         final int EXPECTED_SIZE = 6;
 
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
-        arrayList.add(1);
-        arrayList.add(2);
-        arrayList.add(3);
-        arrayList.add(4);
-        arrayList.add(5);
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+        list.add(5);
 
-        arrayList.add(2, 100);
+        list.add(2, 100);
 
-        assertEquals(EXPECTED_VALUE, (long)arrayList.get(2));
-        assertEquals(EXPECTED_SIZE, arrayList.size());
+        assertEquals(EXPECTED_VALUE, (long) list.get(2));
+        assertEquals(EXPECTED_SIZE, list.size());
     }
 
     @Test
     public void shouldClearArrayList() {
         final int EXPECTED_SIZE = 0;
 
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
-        arrayList.add(1);
-        arrayList.add(2);
-        arrayList.add(3);
-        arrayList.add(4);
-        arrayList.add(5);
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+        list.add(5);
 
-        arrayList.clear();
+        list.clear();
 
-        assertEquals(EXPECTED_SIZE, arrayList.size());
-        assertEquals(EXPECTED_SIZE, arrayList.toArray().length);
+        assertEquals(EXPECTED_SIZE, list.size());
+        assertEquals(EXPECTED_SIZE, list.toArray().length);
     }
 
     @Test
     public void shouldReturnTrueIfContainsElement() {
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
-        arrayList.add(5);
-        arrayList.add(12);
-        arrayList.add(38);
+        list.add(5);
+        list.add(12);
+        list.add(38);
 
-        assertTrue(arrayList.contains(38));
+        assertTrue(list.contains(38));
     }
 
     @Test
     public void shouldReturnFalseIfNotContainsElemetn() {
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
-        arrayList.add(5);
-        arrayList.add(12);
-        arrayList.add(38);
+        list.add(5);
+        list.add(12);
+        list.add(38);
 
-        assertFalse(arrayList.contains(1000));
+        assertFalse(list.contains(1000));
     }
 
     @Test
     public void shouldGetElementByIndex() {
         final int EXPECTED_VALUE = 38;
 
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
-        arrayList.add(5);
-        arrayList.add(12);
-        arrayList.add(38);
+        list.add(5);
+        list.add(12);
+        list.add(38);
 
-        assertEquals(EXPECTED_VALUE, (long)arrayList.get(2));
+        assertEquals(EXPECTED_VALUE, (long) list.get(2));
     }
 
     @Test
     public void shouldThrowWhenNegativeIndexIsPassedToGet() {
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
         assertThrows(IndexOutOfBoundsException.class, () -> {
-           arrayList.get(-1);
+           list.get(-1);
         });
     }
 
     @Test
     public void shouldThrowWhenTooLargeIndexIsPassedToGet() {
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
         assertThrows(IndexOutOfBoundsException.class, () -> {
-            arrayList.get(1000);
+            list.get(1000);
         });
     }
 
@@ -172,72 +190,72 @@ public class ArrayListImplTest {
     public void shouldReturnIndexOfPresentElement() {
         final int EXPECTED_INDEX = 2;
 
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
-        arrayList.add(12);
-        arrayList.add(43);
-        arrayList.add(44);
-        arrayList.add(11);
+        list.add(12);
+        list.add(43);
+        list.add(44);
+        list.add(11);
 
-        assertEquals(EXPECTED_INDEX, arrayList.indexOf(44));
+        assertEquals(EXPECTED_INDEX, list.indexOf(44));
     }
 
     @Test
     public void shouldReturnNegativeWhenAskedForMissingElement() {
         final int EXPECTED_INDEX = -1;
 
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
-        arrayList.add(12);
-        arrayList.add(43);
-        arrayList.add(44);
-        arrayList.add(11);
+        list.add(12);
+        list.add(43);
+        list.add(44);
+        list.add(11);
 
-        assertEquals(EXPECTED_INDEX, arrayList.indexOf(100));
+        assertEquals(EXPECTED_INDEX, list.indexOf(100));
     }
 
     @Test
     public void shouldRemoveElementByValue() {
         final int EXPECTED_SIZE = 3;
 
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
-        arrayList.add(12);
-        arrayList.add(43);
-        arrayList.add(44);
-        arrayList.add(11);
+        list.add(12);
+        list.add(43);
+        list.add(44);
+        list.add(11);
 
         Integer element = 43;
 
-        assertTrue(arrayList.remove(element));
-        assertEquals(EXPECTED_SIZE, arrayList.size());
+        assertTrue(list.remove(element));
+        assertEquals(EXPECTED_SIZE, list.size());
     }
 
     @Test
     public void shouldReturnFalseWhenRemovingMissingElement() {
         final int EXPECTED_SIZE = 4;
 
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
-        arrayList.add(12);
-        arrayList.add(43);
-        arrayList.add(44);
-        arrayList.add(11);
+        list.add(12);
+        list.add(43);
+        list.add(44);
+        list.add(11);
 
         Integer element = 100;
 
-        assertFalse(arrayList.remove(element));
-        assertEquals(EXPECTED_SIZE, arrayList.size());
+        assertFalse(list.remove(element));
+        assertEquals(EXPECTED_SIZE, list.size());
     }
 
     @Test
     public void shouldThrowWhenRemovingElementByNegativeIndex() {
         final String NEGATIVE_INDEX_ERROR_MESSAGE = "Cannot call method with negative index";
 
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
         Exception e = assertThrows(IndexOutOfBoundsException.class, () -> {
-            arrayList.remove(-1);
+            list.remove(-1);
         });
 
         assertThat(e.getMessage(), startsWith(NEGATIVE_INDEX_ERROR_MESSAGE));
@@ -247,10 +265,10 @@ public class ArrayListImplTest {
     public void shouldThrowWhenRemovingElementByTooLargeIndex() {
         final String TOO_LARGE_INDEX_ERROR_MESSAGE = "Cannot call method with index greater than current size";
 
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
         Exception e = assertThrows(IndexOutOfBoundsException.class, () -> {
-            arrayList.remove(2341);
+            list.remove(2341);
         });
 
         assertThat(e.getMessage(), startsWith(TOO_LARGE_INDEX_ERROR_MESSAGE));
@@ -260,12 +278,12 @@ public class ArrayListImplTest {
     public void shouldRemoveElementById() {
         final int VALUE_TO_BE_REMOVED = 5;
 
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
-        arrayList.add(VALUE_TO_BE_REMOVED);
+        list.add(VALUE_TO_BE_REMOVED);
 
-        int value = arrayList.remove(0);
-        int size = arrayList.size();
+        int value = list.remove(0);
+        int size = list.size();
 
         assertEquals(VALUE_TO_BE_REMOVED, value);
         assertEquals(0, size);
@@ -275,31 +293,31 @@ public class ArrayListImplTest {
     public void shouldSortArrayListInAscOrder() {
         final Integer[] EXPECTED_SORTED_ARRAY = { 2, 3, 4, 5 };
 
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
-        arrayList.add(5);
-        arrayList.add(2);
-        arrayList.add(3);
-        arrayList.add(4);
+        list.add(5);
+        list.add(2);
+        list.add(3);
+        list.add(4);
 
-        arrayList.sort((a, b) -> b - a);
+        list.sort((a, b) -> b - a);
 
-        assertArrayEquals(EXPECTED_SORTED_ARRAY, arrayList.toArray());
+        assertArrayEquals(EXPECTED_SORTED_ARRAY, list.toArray());
     }
 
     @Test
     public void shouldSortArrayListInDescOrder() {
         final Integer[] EXPECTED_SORTED_ARRAY = { 5, 4, 3, 2 };
 
-        ArrayList<Integer> arrayList = new ArrayListImpl<>();
+        List<Integer> list = new ArrayListImpl<>();
 
-        arrayList.add(5);
-        arrayList.add(2);
-        arrayList.add(3);
-        arrayList.add(4);
+        list.add(5);
+        list.add(2);
+        list.add(3);
+        list.add(4);
 
-        arrayList.sort((a, b) -> a - b);
+        list.sort((a, b) -> a - b);
 
-        assertArrayEquals(EXPECTED_SORTED_ARRAY, arrayList.toArray());
+        assertArrayEquals(EXPECTED_SORTED_ARRAY, list.toArray());
     }
 }

@@ -7,13 +7,16 @@ import java.util.OptionalInt;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import anderson.api.ArrayList;
-import anderson.api.Sort;
+import anderson.api.List;
+import anderson.api.ArraySort;
 
-public class ArrayListImpl<E> implements ArrayList<E> {
+public class ArrayListImpl<E> implements List<E> {
     private final int DEFAULT_CAPACITY = 10;
     private final int DEFAULT_SIZE = 0;
     private final double DEFAULT_LOAD_FACTOR = 0.75;
+    private final String ARRAY_CANNOT_CONTAIN_NULL_VALUES_EXCEPTION_MESSAGE = "Array cannot contain null values";
+    private final String METHOD_WITH_NEGATIVE_INDEX_EXCEPTION_MESSAGE = "Cannot call method with negative index; index = %d";
+    private final String METHOD_WITH_INDEX_GREATER_THAN_CURRENT_SIZE_EXCEPTION_MESSAGE = "Cannot call method with index greater than current size; size = %d";
 
     /**
      * Size describes how many elements are already stored in the list.
@@ -41,7 +44,7 @@ public class ArrayListImpl<E> implements ArrayList<E> {
      */
     private E[] array;
 
-    private Sort<E> sortingAlgorithm;
+    private ArraySort<E> sortingAlgorithm;
 
     /**
      *  Default constructor which will init arraylist with default capacity.
@@ -49,10 +52,10 @@ public class ArrayListImpl<E> implements ArrayList<E> {
      * @param <E>   type of element which will be stored in a list.
      */
     public <E>ArrayListImpl() {
-        this.capacity = this.DEFAULT_CAPACITY;
-        this.array = this.getEmptyArray(this.capacity);
-        this.threshold = this.calculateThreshold();
-        this.sortingAlgorithm = new QuickSortImpl<>();
+        this.capacity = DEFAULT_CAPACITY;
+        this.array = getEmptyArray(this.capacity);
+        this.threshold = calculateThreshold();
+        this.sortingAlgorithm = new QuickArraySortImpl<>();
     }
 
     /**
@@ -63,13 +66,13 @@ public class ArrayListImpl<E> implements ArrayList<E> {
      */
     public <E>ArrayListImpl(int capacity) {
         this.capacity = capacity;
-        this.array = this.getEmptyArray(this.capacity);
-        this.threshold = this.calculateThreshold();
-        this.sortingAlgorithm = new QuickSortImpl<>();
+        this.array = getEmptyArray(capacity);
+        this.threshold = calculateThreshold();
+        this.sortingAlgorithm = new QuickArraySortImpl<>();
     }
 
     public int getCapacity() {
-        return this.capacity;
+        return capacity;
     }
 
     /**
@@ -97,22 +100,26 @@ public class ArrayListImpl<E> implements ArrayList<E> {
      * Copies all the elements to a bigger arraylist and recalculates threshold.
      */
     private void growCapacity() {
-        int newCapacity = this.capacity + this.DEFAULT_CAPACITY;
+        int newCapacity = capacity + DEFAULT_CAPACITY;
         E[] newArray = getEmptyArray(newCapacity);
 
-        System.arraycopy(this.array, 0, newArray, 0, this.array.length);
+        System.arraycopy(array, 0, newArray, 0, this.array.length);
 
-        this.array = newArray;
-        this.threshold = this.calculateThreshold();
+        array = newArray;
+        threshold = calculateThreshold();
     }
 
     @Override
     public boolean add(E element) {
-        if (this.size == this.threshold) {
-            this.growCapacity();
+        if (element == null) {
+            throw new IllegalArgumentException(ARRAY_CANNOT_CONTAIN_NULL_VALUES_EXCEPTION_MESSAGE);
         }
 
-        this.array[size] = element;
+        if (size == threshold) {
+            growCapacity();
+        }
+
+        array[size] = element;
         size += 1;
 
         return true;
@@ -120,29 +127,36 @@ public class ArrayListImpl<E> implements ArrayList<E> {
 
     @Override
     public void add(int index, E element) {
+        if (element == null) {
+            throw new IllegalArgumentException(ARRAY_CANNOT_CONTAIN_NULL_VALUES_EXCEPTION_MESSAGE);
+        }
         if (index < 0) {
-            throw new IndexOutOfBoundsException(String.format("Cannot call method with negative index; index = %d", index));
-        } else if (index >= this.size) {
-            throw new IndexOutOfBoundsException(String.format("Cannot call method with index greater than current size; size = %d", index));
+            throw new IndexOutOfBoundsException(String.format(METHOD_WITH_NEGATIVE_INDEX_EXCEPTION_MESSAGE, index));
+        } else if (index >= size) {
+            throw new IndexOutOfBoundsException(String.format(METHOD_WITH_INDEX_GREATER_THAN_CURRENT_SIZE_EXCEPTION_MESSAGE, index));
         }
 
-        E[] left = Arrays.copyOfRange(this.array, 0, index);
+        E[] left = Arrays.copyOfRange(array, 0, index);
         E[] middle = (E[]) new Object[] { element };
-        E[] right = Arrays.copyOfRange(this.array, index, this.size);
+        E[] right = Arrays.copyOfRange(array, index, size);
 
-        this.array = (E[]) Stream.of(left, middle , right).flatMap(chunk -> Stream.of(chunk)).toArray();
-        this.size += 1;
+        array = (E[]) Stream.of(left, middle , right).flatMap(chunk -> Stream.of(chunk)).toArray();
+        size += 1;
     }
 
     @Override
     public void clear() {
-        this.array = this.getEmptyArray(this.capacity);
-        this.size = this.DEFAULT_SIZE;
+        array = getEmptyArray(capacity);
+        size = DEFAULT_SIZE;
     }
 
     @Override
     public boolean contains(E element) {
-        boolean isPresent = Arrays.stream(this.array).filter(Objects::nonNull).anyMatch(e -> e.equals(element));
+        if (element == null) {
+            throw new IllegalArgumentException(ARRAY_CANNOT_CONTAIN_NULL_VALUES_EXCEPTION_MESSAGE);
+        }
+
+        boolean isPresent = Arrays.stream(array).filter(Objects::nonNull).anyMatch(e -> e.equals(element));
 
         return isPresent;
     }
@@ -150,9 +164,9 @@ public class ArrayListImpl<E> implements ArrayList<E> {
     @Override
     public E get(int index) {
         if (index < 0) {
-            throw new IndexOutOfBoundsException(String.format("Cannot call method with negative index; index = %d", index));
-        } else if (index >= this.size) {
-            throw new IndexOutOfBoundsException(String.format("Cannot call method with index greater than current size; size = %d", index));
+            throw new IndexOutOfBoundsException(String.format(METHOD_WITH_NEGATIVE_INDEX_EXCEPTION_MESSAGE, index));
+        } else if (index >= size) {
+            throw new IndexOutOfBoundsException(String.format(METHOD_WITH_INDEX_GREATER_THAN_CURRENT_SIZE_EXCEPTION_MESSAGE, index));
         }
 
         return this.array[index];
@@ -160,22 +174,26 @@ public class ArrayListImpl<E> implements ArrayList<E> {
 
     @Override
     public int indexOf(E element) {
-        OptionalInt indexResult = IntStream.range(0, this.size).filter(i -> element.equals(this.get(i))).findFirst();
+        if (element == null) {
+            throw new IllegalArgumentException(ARRAY_CANNOT_CONTAIN_NULL_VALUES_EXCEPTION_MESSAGE);
+        }
+
+        OptionalInt indexResult = IntStream.range(0, size).filter(i -> element.equals(get(i))).findFirst();
 
         return indexResult.orElse(-1);
     }
 
     @Override
     public int size() {
-        return this.size;
+        return size;
     }
 
     @Override
     public boolean remove(E element) {
-        int index = this.indexOf(element);
+        int index = indexOf(element);
 
         if (index != -1) {
-            this.remove(index);
+            remove(index);
 
             return true;
         }
@@ -187,32 +205,32 @@ public class ArrayListImpl<E> implements ArrayList<E> {
     public E remove(int index) {
         if (index < 0) {
             throw new IndexOutOfBoundsException(String.format("Cannot call method with negative index; index = %d", index));
-        } else if (index >= this.size) {
+        } else if (index >= size) {
             throw new IndexOutOfBoundsException(String.format("Cannot call method with index greater than current size; size = %d", index));
         }
 
-        E element = this.array[index];
+        E element = array[index];
 
-        E[] left = Arrays.copyOfRange(this.array, 0, index);
-        E[] right = Arrays.copyOfRange(this.array, index, this.size);
+        E[] left = Arrays.copyOfRange(array, 0, index);
+        E[] right = Arrays.copyOfRange(array, index, size);
 
-        this.array = (E[]) Stream.of(left, right).flatMap(chunk -> Stream.of(chunk)).toArray();
-        this.size -= 1;
+        array = (E[]) Stream.of(left, right).flatMap(chunk -> Stream.of(chunk)).toArray();
+        size -= 1;
 
         return element;
     }
 
     @Override
     public void sort(Comparator<E> comparator) {
-        E[] sorted = this.sortingAlgorithm.sort(Arrays.copyOf(this.array, this.size()), comparator);
+        E[] sorted = sortingAlgorithm.sort(Arrays.copyOf(array, size()), comparator);
 
-        this.array = sorted;
+        array = sorted;
 
-        this.growCapacity();
+        growCapacity();
     }
 
     @Override
     public Object[] toArray() {
-        return Arrays.copyOf(this.array, this.size());
+        return Arrays.copyOf(array, size());
     }
 }

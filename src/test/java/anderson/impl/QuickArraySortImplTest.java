@@ -4,18 +4,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.StringStartsWith.startsWith;
 
-import anderson.api.Sort;
+import anderson.api.ArraySort;
 
-public class QuickSortImplTest {
+public class QuickArraySortImplTest {
     @Test
     public void shouldSortArrayOfComparables() {
         final Integer[] EXPECTED = { 0, 0, 5, 8, 9, 12, 34, 41 };
 
         Integer[] array = { 5, 8, 12, 34, 41, 0, 0, 9};
 
-        Sort<Integer> sort = new QuickSortImpl<>();
+        ArraySort<Integer> sort = new QuickArraySortImpl<>();
 
         assertArrayEquals(EXPECTED, sort.sort(array));
     }
@@ -26,7 +25,7 @@ public class QuickSortImplTest {
 
         Integer[] array = { 5, 8, 12, 34, 41, 0, 0, 9};
 
-        Sort<Integer> sort = new QuickSortImpl<>();
+        ArraySort<Integer> sort = new QuickArraySortImpl<>();
 
         assertArrayEquals(EXPECTED, sort.sort(array, (a, b) -> a - b));
     }
@@ -37,7 +36,7 @@ public class QuickSortImplTest {
 
         String[] array = { "zoo", "the", "I", "don't", "like",};
 
-        Sort<String> sort = new QuickSortImpl<>();
+        ArraySort<String> sort = new QuickArraySortImpl<>();
 
         assertArrayEquals(EXPECTED, sort.sort(array, (a, b) -> b.compareTo(a)));
     }
