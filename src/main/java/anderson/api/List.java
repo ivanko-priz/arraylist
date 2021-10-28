@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 public interface List<E> {
     /**
-     * Adds element to the end of the list.
+     * Adds non-null element to the end of the list.
      *
      * @param   element element to be inserted.
      * @return  true if element is inserted.
@@ -12,7 +12,7 @@ public interface List<E> {
     boolean add(E element);
 
     /**
-     * Adds element at a specified position within the list's capacity.
+     * Adds non-null element at a specified position within the list's capacity.
      *
      * @param index     position at which an element to be inserted.
      * @param element   element to be inserted.
