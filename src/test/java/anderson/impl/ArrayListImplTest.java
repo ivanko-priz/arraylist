@@ -38,6 +38,24 @@ public class ArrayListImplTest {
     }
 
     @Test
+    public void shouldThrowWhenNullElementAdded() {
+        List<Integer> list = new ArrayListImpl<>();
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            list.add(null);
+        });
+    }
+
+    @Test
+    public void shouldThrowWhenNullElementAddedAtPosition() {
+        List<Integer> list = new ArrayListImpl<>();
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            list.add(0, null);
+        });
+    }
+
+    @Test
     public void shouldIncrementSizeAfterAddingElement() {
         final int EXPECTED_LIST_SIZE = 1;
 
