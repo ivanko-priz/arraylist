@@ -3,9 +3,9 @@ package anderson.impl;
 import java.util.function.BiPredicate;
 import java.util.Comparator;
 
-import anderson.api.Sort;
+import anderson.api.ArraySort;
 
-public class QuickSortImpl<E> implements Sort<E> {
+public class QuickArraySortImpl<E> implements ArraySort<E> {
     @Override
     public E[] sort(Comparable<E>[] array) {
         E[] elements = (E[]) array;

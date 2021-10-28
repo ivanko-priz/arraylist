@@ -7,10 +7,10 @@ import java.util.OptionalInt;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import anderson.api.ArrayList;
-import anderson.api.Sort;
+import anderson.api.List;
+import anderson.api.ArraySort;
 
-public class ArrayListImpl<E> implements ArrayList<E> {
+public class ArrayListImpl<E> implements List<E> {
     private final int DEFAULT_CAPACITY = 10;
     private final int DEFAULT_SIZE = 0;
     private final double DEFAULT_LOAD_FACTOR = 0.75;
@@ -41,7 +41,7 @@ public class ArrayListImpl<E> implements ArrayList<E> {
      */
     private E[] array;
 
-    private Sort<E> sortingAlgorithm;
+    private ArraySort<E> sortingAlgorithm;
 
     /**
      *  Default constructor which will init arraylist with default capacity.
@@ -52,7 +52,7 @@ public class ArrayListImpl<E> implements ArrayList<E> {
         this.capacity = this.DEFAULT_CAPACITY;
         this.array = this.getEmptyArray(this.capacity);
         this.threshold = this.calculateThreshold();
-        this.sortingAlgorithm = new QuickSortImpl<>();
+        this.sortingAlgorithm = new QuickArraySortImpl<>();
     }
 
     /**
@@ -65,7 +65,7 @@ public class ArrayListImpl<E> implements ArrayList<E> {
         this.capacity = capacity;
         this.array = this.getEmptyArray(this.capacity);
         this.threshold = this.calculateThreshold();
-        this.sortingAlgorithm = new QuickSortImpl<>();
+        this.sortingAlgorithm = new QuickArraySortImpl<>();
     }
 
     public int getCapacity() {
