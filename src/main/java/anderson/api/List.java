@@ -2,7 +2,7 @@ package anderson.api;
 
 import java.util.Comparator;
 
-public interface ArrayList<E> {
+public interface List<E> {
     /**
      * Adds element to the end of the list.
      *
